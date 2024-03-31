@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
-import ThemeContext from "../store/theme-context";
+import ThemeContext from "../contexts/theme-context";
 
 import SunIcon from '../assets/icons/sun-fill.svg';
 import MoonIcon from '../assets/icons/moon-fill.svg';
@@ -11,7 +11,7 @@ import {Block, Button, Dropdown, Text} from 'react-barebones-ts'
 import GoogleIcon from "../assets/icons/google-16.svg";
 import HeartIcon from '../assets/icons/heart-fill.svg'
 
-import UserContext from "../store/user-context";
+import UserContext from "../contexts/user-context";
 import SearchLine from "../assets/icons/search-line.svg";
 
 const Nav = () => {

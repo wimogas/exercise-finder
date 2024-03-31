@@ -2,10 +2,10 @@ import React, {useContext, useState} from 'react'
 
 import {Block, Button, Text} from "react-barebones-ts";
 import SearchQuery from "../components/exercises/search-query/SearchQuery";
-import ExerciseContext from "../store/exercise-context";
+import ExerciseContext from "../contexts/exercise-context";
 
 import {useNavigate} from "react-router-dom";
-import ThemeContext from "../store/theme-context";
+import ThemeContext from "../contexts/theme-context";
 import AppWrapper from "../layout/AppWrapper";
 import SearchLine from "../assets/icons/search-line.svg";
 import Exercise from "../components/exercises/exercise/Exercise";

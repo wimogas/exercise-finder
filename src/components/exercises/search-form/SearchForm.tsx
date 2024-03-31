@@ -3,9 +3,9 @@ import {Block, Button, Text} from "react-barebones-ts";
 
 import SearchBar from "../search-bar/SearchBar";
 import SearchLine from '../../../assets/icons/search-line.svg'
-import ExerciseContext from "../../../store/exercise-context";
+import ExerciseContext from "../../../contexts/exercise-context";
 import Filter from "../filter/Filter";
-import ThemeContext from "../../../store/theme-context";
+import ThemeContext from "../../../contexts/theme-context";
 import {useNavigate} from "react-router-dom";
 import CloseIcon from '../../../assets/icons/close-fill.svg'
 import BackIcon from "../../../assets/icons/arrow-left-s-line.svg";

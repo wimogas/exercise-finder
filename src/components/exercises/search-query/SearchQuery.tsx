@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import {Badge, Block, Text} from "react-barebones-ts";
 
-import ExerciseContext from "../../../store/exercise-context";
+import ExerciseContext from "../../../contexts/exercise-context";
 
 const SearchQuery = () => {
 

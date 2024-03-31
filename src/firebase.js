@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, inMemoryPersistence} from "firebase/auth";
+import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_APIKEY,
@@ -10,12 +10,10 @@ const firebaseConfig = {
     appId: process.env.FIREBASE_APPID
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp = initializeApp(firebaseConfig);
 const googleAuthProvider = new GoogleAuthProvider();
 googleAuthProvider.setCustomParameters({
     prompt : "select_account "
 });
 export const auth = getAuth(firebaseApp);
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleAuthProvider);
-
-export const setFirebasePersistenceOff = () => setPersistence(getAuth(), inMemoryPersistence)

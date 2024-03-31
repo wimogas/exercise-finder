@@ -3,10 +3,10 @@ import React, {useContext, useEffect} from 'react'
 import {Block, Button, Text} from "react-barebones-ts";
 
 import {useNavigate} from "react-router-dom";
-import ThemeContext from "../store/theme-context";
+import ThemeContext from "../contexts/theme-context";
 import AppWrapper from "../layout/AppWrapper";
 import SearchLine from "../assets/icons/search-line.svg";
-import UserContext from "../store/user-context";
+import UserContext from "../contexts/user-context";
 import Exercise from "../components/exercises/exercise/Exercise";
 import EmptyState from "../components/exercises/empty-state/EmptyState";
 

@@ -3,7 +3,7 @@ import React, {useContext} from "react";
 import {Block} from 'react-barebones-ts'
 import Content from "./Content";
 
-import ThemeContext from "../store/theme-context";
+import ThemeContext from "../contexts/theme-context";
 
 
 const OverlayWrapper = ({children}: any) => {

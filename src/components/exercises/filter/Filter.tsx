@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 
 import {Block, Button, Text} from 'react-barebones-ts'
-import ThemeContext from "../../../store/theme-context";
+import ThemeContext from "../../../contexts/theme-context";
 
 type FilterProps = {
     name: string,

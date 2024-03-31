@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {Block, Button, Text} from 'react-barebones-ts'
 
 import SearchLine from "../../../assets/icons/search-line.svg";
-import ThemeContext from "../../../store/theme-context";
+import ThemeContext from "../../../contexts/theme-context";
 import {useNavigate} from "react-router-dom";
 
 type EmptyStateProps = {

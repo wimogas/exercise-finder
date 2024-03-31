@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Badge, Block, Button, Text} from 'react-barebones-ts'
-import UserContext from "../../../store/user-context";
+import UserContext from "../../../contexts/user-context";
 
 import UnHeartIcon from '../../../assets/icons/heart-fill.svg'
 import HeartIcon from '../../../assets/icons/heart-line.svg'
