@@ -1,0 +1,26 @@
+@import './assets/scss/theme';
+
+@import '../node_modules/@wimogas/barebones-css/build/scss/styles';
+
+@import './assets/scss/components/button';
+@import './assets/scss/components/dropdown';
+@import './assets/scss/components/tooltip';
+@import './assets/scss/components/badge';
+@import './assets/scss/components/exercise';
+@import './assets/scss/components/overlay';
+@import './assets/scss/components/draggable';
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: $fontOpenSans, Helvetica, sans-serif;
+    font-size: 14px;
+    min-width: 420px;
+    min-height: 100vh;
+}

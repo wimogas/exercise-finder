@@ -1,0 +1,86 @@
+.wopl-button {
+  font-family: inherit;
+  padding: $spacing200 $spacing300;
+  border-radius: $borderRadius300;
+  border: 1px solid transparent;
+  gap: $spacing200;
+  align-items: center;
+  &-primary {
+    @extend .wopl-button;
+    background: $primary500;
+    color: white;
+    &:hover {
+      background: $primary700;
+    }
+    &-dark {
+      @extend .wopl-button-primary;
+      background: $primary400;
+      color: white;
+      &:hover {
+        background: $primary600;
+      }
+      &:disabled {
+        @extend .wopl-button-primary-dark;
+        opacity: .2;
+        cursor: default;
+        &:hover {
+          background: $primary400;
+        }
+      }
+    }
+  }
+  &-secondary {
+    @extend .wopl-button;
+    background: white;
+    color: $secondary900;
+    border: 1px solid $secondary300;
+    &:hover {
+      border-color: $secondary500;
+    }
+    &:disabled {
+      background: $secondary100;
+      color: $secondary500;
+      cursor: default;
+      &:hover {
+        border-color: $secondary300;
+      }
+    }
+    &-dark {
+      @extend .wopl-button-secondary;
+      background: transparent;
+      color: $secondary300;
+      border: 1px solid $secondary100;
+      &:hover {
+        border-color: $secondary300;
+        color: $secondary100;
+      }
+      &:disabled {
+        @extend .wopl-button-secondary-dark;
+        opacity: .2;
+        cursor: default;
+        &:hover {
+          color: $secondary300;
+          border-color: $secondary100;
+        }
+      }
+    }
+  }
+  &-icon {
+    border: transparent;
+    background: transparent;
+    padding: $spacing300;
+    color: $neutral300;
+    transition: all .3s ease;
+    &:hover {
+      color: $neutral400;
+    }
+    &:disabled {
+      @extend .wopl-button-icon;
+      opacity: .2;
+      cursor: default;
+      &:hover {
+        color: $neutral300;
+      }
+    }
+  }
+}

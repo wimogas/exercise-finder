@@ -1,0 +1,9 @@
+.wopl-dropdown {
+  border: 1px solid;
+  border-radius: $borderRadius300;
+  &-dark {
+    @extend .wopl-dropdown;
+    background-color: $neutral900;
+    border-color: $neutral600;
+  }
+}

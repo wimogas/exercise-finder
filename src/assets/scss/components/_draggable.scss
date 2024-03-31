@@ -1,0 +1,12 @@
+.wopl-drag-draggable {
+  cursor: grab;
+}
+
+.wopl-drag-current {
+  background: $neutral900;
+  border-radius: $borderRadius300;
+  height: 50px;
+  > * {
+    opacity: 0;
+  }
+}
