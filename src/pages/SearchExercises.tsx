@@ -11,10 +11,10 @@ const SearchExercises = () => {
     return (
         <OverlayWrapper>
             <Block column>
-                <Block justify={"space-between"} align={"center"}>
+                <Block justify={"space-between"} align={"center"} classes={"bb-mb-500"}>
                     <Block align={"center"} classes={"bb-secondary-300 bb-gap-300"}>
                         <Icon icon={<SearchLine/>} size={24} color={"#C7C8C9"}></Icon>
-                        <Text type="h1" text={"Search Exercise"}/>
+                        <Text type="h1" text={"Search Exercises"}/>
                     </Block>
                     <Button classes="wopl-button-icon" action={() => history.back()} icon={<CloseIcon/>} iconSize={24}></Button>
                 </Block>

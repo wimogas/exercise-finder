@@ -12,17 +12,13 @@ import EmptyState from "../components/exercises/empty-state/EmptyState";
 
 const FavoriteExercises = () => {
 
-    const navigate = useNavigate()
-
     const userCtx = useContext(UserContext)
     const themeCtx = useContext(ThemeContext)
 
     useEffect(() => {
-
         if(userCtx.newFavorites) {
             userCtx.setNewFavorites(false)
         }
-
     }, [userCtx.newFavorites]);
 
     return (
@@ -31,10 +27,10 @@ const FavoriteExercises = () => {
                 <Block>
                     <Text classes={`${themeCtx.dark ? "bb-secondary-300" : "bb-neutral-900"}`} type="h1" text={"Favorite Exercises"}/>
                 </Block>
-                {userCtx.user.favorites.length > 0 ?
+                {userCtx.user.favorites && userCtx.user.favorites.length > 0 ?
                     <div className={"wopl-grid"}>
                         {userCtx.user.favorites.map((exercise: any) =>
-                                <Exercise key={exercise.title} data={exercise}/>)}
+                                <Exercise key={exercise.title} data={exercise}/>).reverse()}
                     </div>
                     :
                     <EmptyState message={"No favorites found."}/>

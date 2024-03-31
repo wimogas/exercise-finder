@@ -51,7 +51,19 @@ export const UserContextProvider = (props: any) => {
         })
     }
 
-    const addFavorite = (favorite: any) => {
+    const addFavorite = async (favorite: any) => {
+        await fetch(
+            `${process.env.API_SERVER_URL}/users/${user.id}/favorites`,{
+                method: "PATCH",
+                credentials: "include",
+                body: JSON.stringify({
+                    favoriteId: favorite._id
+                }),
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            }
+        )
         const favorites = user.favorites.length > 0 ? [...user.favorites, favorite] : [favorite]
         setUser((user) => {
             return {
@@ -62,7 +74,16 @@ export const UserContextProvider = (props: any) => {
         setNewFavorites(true)
     }
 
-    const removeFavorite = (id: string) => {
+    const removeFavorite = async (id: string) => {
+        await fetch(
+            `${process.env.API_SERVER_URL}/users/${user.id}/favorites/${id}`,{
+                method: "DELETE",
+                credentials: "include",
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            }
+        )
         setUser((user) => {
             return {
                 ...user,
@@ -110,7 +131,8 @@ export const UserContextProvider = (props: any) => {
                     return {
                         ...user,
                         id: currentUser.id,
-                        email: currentUser.email
+                        email: currentUser.email,
+                        favorites: currentUser.favorites
                     }
                 })
             }
@@ -136,7 +158,8 @@ export const UserContextProvider = (props: any) => {
                     return {
                         ...user,
                         id: currentUser.id,
-                        email: currentUser.email
+                        email: currentUser.email,
+                        favorites: currentUser.favorites
                     }
                 })
             } else {
