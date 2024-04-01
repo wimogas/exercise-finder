@@ -1,127 +1,71 @@
-import React, { createContext, useState } from "react";
+import React, {createContext, useEffect, useState} from "react";
+import exerciseDataset from '../assets/dataset/exercisesdataset.json'
 
-export type Exercise = {
+export type ExerciseType = {
     id: string,
-    _id: string,
     title: string,
     desc: string,
     type: string,
     bodyPart: string,
     equipment: string,
     level: string,
-    counters?: any,
 }
 
-export type LastQuery = {
+export type Query = {
     title: string,
     type: string,
     bodyPart: string,
     equipment: string,
-    level: string
+    level: string,
 }
 
 type ExerciseCont = {
-    exercises: Exercise[],
-    getExercises: any,
-    getMoreExercises: any,
-    saveLastQuery: any,
-    lastQuery: LastQuery,
-    lastQueryParams: string,
-    page: number
+    exercises: ExerciseType[],
+    filterExercises: any,
+    page: number,
+    paginate: any,
+    limit: number
 }
 
 const ExerciseContext = createContext<ExerciseCont>(
     {
         exercises: [],
-        getExercises: (query?: any) => {},
-        getMoreExercises: () => {},
-        saveLastQuery: (query: any) => {},
-        lastQuery: {
-            title: '',
-            type: '',
-            bodyPart: '',
-            equipment: '',
-            level: ''
-
-        },
-        lastQueryParams: '',
-        page: 0,
+        filterExercises: (query: any) => {},
+        page: 1,
+        paginate: () => {},
+        limit: 20,
     },
 );
 
 export const ExerciseContextProvider = (props: any) => {
 
-    const [exercises, setExercises] = useState<Exercise[]>([])
-    const [lastQuery, setLastQuery] = useState<LastQuery>({
-        title: '',
-        type: '',
-        bodyPart: '',
-        equipment: '',
-        level: ''
+    const [exercises, setExercises] = useState<ExerciseType[]>([])
+    const [limit, setLimit] = useState<number>(20)
+    const [page, setPage] = useState<number>(1)
 
-    })
-    const [lastQueryParams, setLastQueryParams] = useState<string>('')
-    const [page, setPage] = useState<number>(0)
-
-
-    const getExercises = async (query: any) => {
-        let q: string = ''
-
-        if(query && Object.keys(query).length > 0) {
-            q += '?'
-            for (const [key, value] of Object.entries(query)) {
-                q +=`${key}=${value}&`
-            }
-        }
-
-        if (q.length > 0) {
-            setLastQueryParams(q)
-            setPage(page+1)
-            const res = await fetch(
-                `${process.env.API_SERVER_URL}/exercises${q}`,{
-                    method: "GET",
-                    credentials: "include",
-                    headers: {
-                        'Content-Type' : 'application/json'
-                    }
-                }
-            )
-            const foundExercises = await res.json()
-            setExercises(foundExercises.data)
-        }
+    const filterExercises = (query: Query) => {
+        const filteredExercises = exercises.filter(exercise => exercise.title.includes(query.title))
+        setExercises(filteredExercises)
     }
 
-    const getMoreExercises = async () => {
-
-        if (lastQueryParams.length > 0) {
-            setPage(page+1)
-            const res = await fetch(
-                `${process.env.API_SERVER_URL}/exercises${lastQueryParams}skip=${page.toString()}`,{
-                    method: "GET",
-                    credentials: "include",
-                    headers: {
-                        'Content-Type' : 'application/json'
-                    }
-                }
-            )
-            const foundExercises = await res.json()
-            setExercises((prevState) => [...prevState, ...foundExercises.data])
-            return foundExercises.data.length
-        }
+    const paginate = () => {
+        setPage(page+1)
     }
 
-    const saveLastQuery = (query: LastQuery) => {
-        setLastQuery(query)
+    const initExercises = (exercises: any) => {
+        setExercises(exercises)
     }
+
+    useEffect(() => {
+        initExercises(exerciseDataset)
+    }, []);
 
     const context: ExerciseCont = {
         exercises,
-        getExercises,
-        getMoreExercises,
-        saveLastQuery,
-        lastQuery,
-        lastQueryParams,
-        page
+        filterExercises,
+        page,
+        paginate,
+        limit
     }
 
     return (

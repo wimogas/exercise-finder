@@ -16,15 +16,15 @@ const Exercise = ({data}: ExerciseProps) => {
 
     const handleAddToFavorites = () => {
         if (isFavorite) {
-            userCtx.removeFavorite(data._id)
+            userCtx.removeFavorite(data.id)
             setIsFavorite(false)
         } else {
-            userCtx.addFavorite(data)
+            userCtx.addFavorite(data.id)
             setIsFavorite(true)
         }
     }
     useEffect(() => {
-        if (userCtx.user.favorites.some((fav: any) => fav._id === data._id)) {
+        if (userCtx.user.favorites.some((fav: any) => fav === data.id)) {
             setIsFavorite(true)
         }
     }, [userCtx.user.favorites]);

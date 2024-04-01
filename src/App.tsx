@@ -13,19 +13,19 @@ import FavoriteExercises from "./pages/FavoriteExercises";
 const App = () => {
 
     return (
-        <UserContextProvider>
-            <ExerciseContextProvider>
-                <ThemeContextProvider>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<Exercises/>}/>
-                            <Route path="/search" element={<SearchExercises/>}/>
-                            <Route path="/favorites" element={<FavoriteExercises/>}/>
-                        </Routes>
-                    </BrowserRouter>
-                </ThemeContextProvider>
-            </ExerciseContextProvider>
-        </UserContextProvider>
+        <ExerciseContextProvider>
+            <UserContextProvider>
+                    <ThemeContextProvider>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={<Exercises/>}/>
+                                <Route path="/search" element={<SearchExercises/>}/>
+                                <Route path="/favorites" element={<FavoriteExercises/>}/>
+                            </Routes>
+                        </BrowserRouter>
+                    </ThemeContextProvider>
+            </UserContextProvider>
+        </ExerciseContextProvider>
 
     );
 };

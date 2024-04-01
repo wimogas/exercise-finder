@@ -52,8 +52,7 @@ const SearchForm = () => {
         if (level !== '') {
             query["level"] = level
         }
-        exerciseCtx.saveLastQuery(query)
-        await exerciseCtx.getExercises(query)
+        exerciseCtx.filterExercises(query)
         navigate('/')
     }
 

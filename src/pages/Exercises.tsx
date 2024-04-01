@@ -1,22 +1,30 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 
 import {Block, Button, Text} from "react-barebones-ts";
 import SearchQuery from "../components/exercises/search-query/SearchQuery";
 import ExerciseContext from "../contexts/exercise-context";
 
-import {useNavigate} from "react-router-dom";
 import ThemeContext from "../contexts/theme-context";
 import AppWrapper from "../layout/AppWrapper";
-import SearchLine from "../assets/icons/search-line.svg";
+
 import Exercise from "../components/exercises/exercise/Exercise";
 import EmptyState from "../components/exercises/empty-state/EmptyState";
+import {ExerciseType} from '../contexts/exercise-context'
+
 
 const Exercises = () => {
 
-    const navigate = useNavigate()
+    const {exercises, page, paginate, limit} = useContext(ExerciseContext)
+    const {dark} = useContext(ThemeContext)
 
-    const exerciseCtx = useContext(ExerciseContext)
-    const themeCtx = useContext(ThemeContext)
+    const [limitedExercises, setLimitedExercises] = useState<ExerciseType[]>([])
+
+    useEffect(() => {
+        if (exercises.length > 0) {
+            console.log(exercises, page, limit)
+            setLimitedExercises(exercises.slice(0, page * limit))
+        }
+    }, [exercises]);
 
     const [showMore, setShowMore] = useState(true)
 
@@ -24,20 +32,18 @@ const Exercises = () => {
         <AppWrapper>
             <Block column classes="bb-gap-300">
                 <Block>
-                    <Text classes={`${themeCtx.dark ? "bb-secondary-300" : "bb-neutral-900"}`} type="h1" text={"Exercises"}/>
+                    <Text classes={`${dark ? "bb-secondary-300" : "bb-neutral-900"}`} type="h1" text={"Exercises"}/>
                 </Block>
-                {exerciseCtx.exercises.length > 0 ?
+                {limitedExercises.length > 0 ?
                     <>
                         <SearchQuery/>
-                        {exerciseCtx.exercises.map(exercise => <Exercise key={exercise.title} data={exercise}/>)}
+                        {limitedExercises.map(exercise => <Exercise key={exercise.id} data={exercise}/>)}
                         {showMore &&
                             <Button
-                                classes={`bb-block-row-center wopl-button-secondary${themeCtx.dark ? '-dark' : ''}`}
-                                action={async () => {
-                                    const found = await exerciseCtx.getMoreExercises()
-                                    if (found === 0) {
-                                        setShowMore(false)
-                                    }
+                                classes={`bb-block-row-center wopl-button-secondary${dark ? '-dark' : ''}`}
+                                action={ () => {
+                                    paginate()
+                                    setLimitedExercises(exercises.slice(0, (page+1) * limit))
                                 }}>
                                 Load more...
                             </Button>
