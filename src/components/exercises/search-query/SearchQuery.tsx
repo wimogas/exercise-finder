@@ -1,14 +1,28 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Badge, Block, Text} from "react-barebones-ts";
-
 import ExerciseContext from "../../../contexts/exercise-context";
+
 
 const SearchQuery = () => {
 
+    const {query} = useContext(ExerciseContext)
+
+    const [queryList, setQueryList] = useState<any[]>([])
+
+    useEffect(() => {
+        setQueryList(Object.values(query))
+    }, [query]);
+
     return (
-        <Block classes="bb-bg-neutral-800 bb-p-300 bb-border-radius-300 bb-gap-300">
-            <Text classes="bb-secondary-300" text="Results for:"/>
-        </Block>
+        <>
+        {queryList.length > 0 ?
+            <Block classes="bb-bg-neutral-800 bb-p-300 bb-border-radius-300 bb-gap-300">
+                <Text classes="bb-secondary-300" text="Results for:"/>
+                {queryList.map(query => <Badge key={query} classes={"wopl-badge"}>{query}</Badge>)}
+            </Block> :
+        <></>
+        }
+        </>
     )
 }
 

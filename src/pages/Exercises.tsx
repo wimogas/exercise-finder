@@ -10,19 +10,19 @@ import AppWrapper from "../layout/AppWrapper";
 import Exercise from "../components/exercises/exercise/Exercise";
 import EmptyState from "../components/exercises/empty-state/EmptyState";
 import {ExerciseType} from '../contexts/exercise-context'
+import SearchForm from "../components/exercises/search-form/SearchForm";
 
 
 const Exercises = () => {
 
-    const {exercises, page, paginate, limit} = useContext(ExerciseContext)
+    const {exercises, page, paginate, limit, query} = useContext(ExerciseContext)
     const {dark} = useContext(ThemeContext)
 
     const [limitedExercises, setLimitedExercises] = useState<ExerciseType[]>([])
 
     useEffect(() => {
         if (exercises.length > 0) {
-            console.log(exercises, page, limit)
-            setLimitedExercises(exercises.slice(0, page * limit))
+            setLimitedExercises(exercises)
         }
     }, [exercises]);
 
@@ -31,19 +31,20 @@ const Exercises = () => {
     return (
         <AppWrapper>
             <Block column classes="bb-gap-300">
+                <SearchForm setData={setLimitedExercises}/>
                 <Block>
-                    <Text classes={`${dark ? "bb-secondary-300" : "bb-neutral-900"}`} type="h1" text={"Exercises"}/>
+                    <Text classes={`${dark ? "bb-secondary-300" : "bb-neutral-900"}`} type="h1" text={`Exercises (${limitedExercises.length})`}/>
                 </Block>
                 {limitedExercises.length > 0 ?
                     <>
                         <SearchQuery/>
-                        {limitedExercises.map(exercise => <Exercise key={exercise.id} data={exercise}/>)}
+                        {limitedExercises.slice(0, page * limit).map(exercise => <Exercise key={exercise.id} data={exercise}/>)}
                         {showMore &&
                             <Button
                                 classes={`bb-block-row-center wopl-button-secondary${dark ? '-dark' : ''}`}
                                 action={ () => {
                                     paginate()
-                                    setLimitedExercises(exercises.slice(0, (page+1) * limit))
+                                    setLimitedExercises(limitedExercises.slice(0, (page+1) * limit))
                                 }}>
                                 Load more...
                             </Button>

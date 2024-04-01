@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react'
 
 import {Block, Button, Text} from "react-barebones-ts";
 
-import {useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 import ThemeContext from "../contexts/theme-context";
 import AppWrapper from "../layout/AppWrapper";
 import SearchLine from "../assets/icons/search-line.svg";
@@ -12,11 +12,14 @@ import EmptyState from "../components/exercises/empty-state/EmptyState";
 import exercises from "./Exercises";
 import ExerciseContext, {ExerciseType} from "../contexts/exercise-context";
 import exerciseContext from "../contexts/exercise-context";
+import {set} from "js-cookie";
 
 const FavoriteExercises = () => {
     const {exercises} = useContext(ExerciseContext)
     const {newFavorites, setNewFavorites, user} = useContext(UserContext)
     const {dark} = useContext(ThemeContext)
+
+    const [isAuth, setIsAuth] = useState(user.email !== '')
 
     const [list, setList] = useState<ExerciseType[]>([])
 
@@ -41,6 +44,18 @@ const FavoriteExercises = () => {
         }
 
     }, [exercises, user.favorites]);
+
+    useEffect(() => {
+        if (user.email !== '') {
+            setIsAuth(true)
+        } else {
+            setIsAuth(false)
+        }
+    }, [user])
+
+    if (!isAuth) {
+        return <Navigate to={'/'}/>
+    }
 
     return (
         <AppWrapper>

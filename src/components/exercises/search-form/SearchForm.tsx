@@ -1,96 +1,109 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Block, Button, Text} from "react-barebones-ts";
+import {Block, Icon} from "react-barebones-ts";
 
 import SearchBar from "../search-bar/SearchBar";
-import SearchLine from '../../../assets/icons/search-line.svg'
-import ExerciseContext from "../../../contexts/exercise-context";
+
 import Filter from "../filter/Filter";
-import ThemeContext from "../../../contexts/theme-context";
-import {useNavigate} from "react-router-dom";
-import CloseIcon from '../../../assets/icons/close-fill.svg'
-import BackIcon from "../../../assets/icons/arrow-left-s-line.svg";
+import ExerciseContext from "../../../contexts/exercise-context";
+import SearchIcon from "../../../assets/icons/search-line.svg";
+import FilterIcon from "../../../assets/icons/filter.svg";
 
-const SearchForm = () => {
+type SearchFormProps = {
+    setData: any
+}
 
-    const navigate = useNavigate();
+const SearchForm = ({setData} : SearchFormProps) => {
 
-    const exerciseCtx = useContext(ExerciseContext)
-    const themeCtx = useContext(ThemeContext)
+    const {filterExercises, saveQuery} = useContext(ExerciseContext)
 
-    const [invalidSearch, setInvalidSearch] = useState(true)
-
+    const [query, setQuery] = useState({})
     const [searchField, setSearchField] = useState('')
     const [type, setType] = useState('')
     const [bodyPart, setBodyPart] = useState('')
     const [equipment, setEquipment] = useState('')
     const [level, setLevel] = useState('')
 
+    interface Query {
+        [k: string]: string
+    }
     useEffect(() => {
-        if( searchField.length > 0 || (
-            type !== '' || bodyPart !== '' || equipment !== '' || level !== ''
-        ) ) {
-            setInvalidSearch(false)
-        } else {
-            setInvalidSearch(true)
+        let q: Query = {}
+        if (searchField != '') {
+            q["title"] = searchField
         }
+        if (type != '') {
+            q["type"] = type
+        }
+        if (bodyPart != '') {
+            q["bodyPart"] = bodyPart
+        }
+        if (equipment != '') {
+            q["equipment"] = equipment
+        }
+        if (level != '') {
+            q["level"] = level
+        }
+        setQuery(q)
     }, [searchField, type, bodyPart, equipment, level]);
 
-    const handleOnSubmit = async () => {
-        let query: {[k: string] : string} = {}
-        if (searchField !== '') {
-            query["title"] = searchField
+    useEffect(() => {
+        saveQuery(query)
+        setData(filterExercises(query))
+    }, [query]);
+
+    const filters = [
+        {
+            name: "All Types",
+            selected: type,
+            setSelected: setType,
+            options: ["Strength", "Cardio"]
+        },
+        {
+            name: "All Target Areas",
+            selected: bodyPart,
+            setSelected: setBodyPart,
+            options: ["Biceps", "Quadriceps"]
+        },
+        {
+            name: "All Equipment",
+            selected: equipment,
+            setSelected: setEquipment,
+            options: ["Barbell", "Dumbbell"]
+        },
+        {
+            name: "All Levels",
+            selected: level,
+            setSelected: setLevel,
+            options: ["Beginner", "Intermediate"]
         }
-        if (type !== '') {
-            query["type"] = type
-        }
-        if (bodyPart !== '') {
-            query["bodyPart"] = bodyPart
-        }
-        if (equipment !== '') {
-            query["equipment"] = equipment
-        }
-        if (level !== '') {
-            query["level"] = level
-        }
-        exerciseCtx.filterExercises(query)
-        navigate('/')
-    }
+    ]
 
     return (
-        <Block column classes="bb-gap-300">
-            <Block stretch>
-                <SearchBar setSearchField={setSearchField}/>
+        <Block classes="bb-bg-neutral-800 bb-secondary-300 bb-p-500 bb-border-radius-300 bb-wrap" style={{"gap" : "24px"}}>
+            <Block align={"center"} classes={"bb-gap-300"}>
+                <Block>
+                    <Icon icon={<SearchIcon/>} size={24}/>
+                </Block>
+                <Block>
+                    <SearchBar setSearchField={setSearchField}/>
+                </Block>
             </Block>
-            <Block column classes="bb-bg-neutral-800 bb-p-500 bb-border-radius-300">
-                <Filter
-                    name={"Type"}
-                    selected={type}
-                    setSelected={setType}
-                    options={["Strength", "Cardio"]}/>
 
-                <Filter
-                    name={"Target Area"}
-                    selected={bodyPart}
-                    setSelected={setBodyPart}
-                    options={["Biceps", "Quadriceps"]}/>
-                <Filter
-                    name={"Equipment"}
-                    selected={equipment}
-                    setSelected={setEquipment}
-                    options={["Barbell", "Dumbbell"]}/>
-                <Filter
-                    name={"Level"}
-                    selected={level}
-                    setSelected={setLevel}
-                    options={["Beginner", "Intermediate"]}/>
-            </Block>
-            <Block classes="tf-overlay-bottom-bar" justify={"flex-end"}>
-                <Button
-                    disabled={invalidSearch}
-                    classes={`wopl-button-primary${themeCtx.dark ? '-dark' : ''}`}
-                    icon={<SearchLine/>}
-                    action={handleOnSubmit}>Search
-                </Button>
+            <Block align={"center"} classes="bb-gap-300">
+                <Block>
+                    <Icon icon={<FilterIcon/>} size={24}/>
+                </Block>
+                <Block classes={"bb-gap-300 bb-wrap"}>
+                    {filters.map(filter => <Filter
+                        key={filter.name}
+                        name={filter.name}
+                        setSelected={filter.setSelected}
+                        selected={filter.selected}
+                        options={filter.options}
+                    />)}
+                </Block>
+
+
             </Block>
         </Block>
     )

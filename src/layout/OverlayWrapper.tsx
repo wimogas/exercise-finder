@@ -5,15 +5,14 @@ import Content from "./Content";
 
 import ThemeContext from "../contexts/theme-context";
 
-
 const OverlayWrapper = ({children}: any) => {
 
-    const themeCtx = useContext(ThemeContext);
+    const {dark} = useContext(ThemeContext);
 
     return(
         <Block column classes={"tf-overlay"}>
             <Block
-                classes={`${themeCtx.dark ? "bb-bg-neutral-700" : "bb-bg-white"}`}
+                classes={`${dark ? "bb-bg-neutral-700" : "bb-bg-white"}`}
                 style={{
                 "minHeight": "calc(100vh - 80px)"}}>
                 <Content>

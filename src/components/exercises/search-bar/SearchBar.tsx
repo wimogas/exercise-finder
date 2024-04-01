@@ -9,7 +9,7 @@ type SearchBarProps = {
 
 const SearchBar = ({setSearchField}: SearchBarProps) => {
 
-    const themeCtx = useContext(ThemeContext);
+    const {dark} = useContext(ThemeContext);
 
     const handleSetFieldName = (e: any) => {
         setSearchField(e.target.value)
@@ -17,9 +17,9 @@ const SearchBar = ({setSearchField}: SearchBarProps) => {
 
     return (
         <Input
-            classes={`bb-border-1 ${themeCtx.dark ? 'bb-border-secondary-300 bb-bg-neutral-700 bb-secondary-100' : 'bb-border-secondary-500'}`}
+            classes={`bb-border-1 ${dark ? 'bb-border-secondary-300 bb-bg-neutral-700 bb-secondary-100' : 'bb-border-secondary-500'}`}
             name={"search"}
-            placeholder="Search by name..."
+            placeholder={`Search by name...`}
             onChange={handleSetFieldName}/>
     )
 }

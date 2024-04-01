@@ -7,7 +7,6 @@ import {ThemeContextProvider} from "./contexts/theme-context";
 import {ExerciseContextProvider} from "./contexts/exercise-context";
 
 import Exercises from "./pages/Exercises";
-import SearchExercises from "./pages/SearchExercises";
 import FavoriteExercises from "./pages/FavoriteExercises";
 
 const App = () => {
@@ -19,7 +18,6 @@ const App = () => {
                         <BrowserRouter>
                             <Routes>
                                 <Route path="/" element={<Exercises/>}/>
-                                <Route path="/search" element={<SearchExercises/>}/>
                                 <Route path="/favorites" element={<FavoriteExercises/>}/>
                             </Routes>
                         </BrowserRouter>

@@ -1,8 +1,7 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
+import React, {createContext, useEffect, useState} from "react";
 import {auth, firebaseApp, signInWithGooglePopup} from "../firebase";
 import {onAuthStateChanged} from 'firebase/auth'
-import ExerciseContext from "./exercise-context";
-import {collection, doc, getDoc, arrayUnion, arrayRemove, getDocs, getFirestore, query, where, updateDoc, addDoc} from "@firebase/firestore/lite";
+import {collection, doc, arrayUnion, arrayRemove, getDocs, getFirestore, query, where, updateDoc, addDoc} from "@firebase/firestore/lite";
 
 
 export type User = {
@@ -42,8 +41,6 @@ const UserContext = createContext<UserCont>(
 );
 
 export const UserContextProvider = (props: any) => {
-
-    const {exercises} = useContext(ExerciseContext)
 
     const firestore = getFirestore(firebaseApp);
 

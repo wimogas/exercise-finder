@@ -7,19 +7,20 @@ import ThemeContext from "../contexts/theme-context";
 
 const AppWrapper = ({children}: any) => {
 
-    const themeCtx = useContext(ThemeContext);
+    const {dark} = useContext(ThemeContext);
 
     return(
         <Block column>
             <Nav/>
             <Block
-                classes={`${themeCtx.dark ? "bb-bg-neutral-700" : "bb-bg-white"}`}
+                classes={`${dark ? "bb-bg-neutral-700" : "bb-bg-white"}`}
                 style={{
                 "minHeight": "calc(100vh - 66px)"}}>
                 <Content>
                     {children}
                 </Content>
             </Block>
+            <Block>Github</Block>
         </Block>
     )
 }
