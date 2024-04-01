@@ -1,6 +1,5 @@
 import React, {createContext, useEffect, useState} from "react";
-import exerciseDataset from '../assets/dataset/exercisesdataset.json'
-import exercise from "../components/exercises/exercise/Exercise";
+import {getDatasetUrl} from "../firebase";
 
 export type ExerciseType = {
     id: string,
@@ -24,7 +23,8 @@ type ExerciseCont = {
     types: any,
     bodyParts: any,
     equipments: any,
-    levels: any
+    levels: any,
+    loadingExercises: boolean
 }
 
 interface Query {
@@ -48,7 +48,8 @@ const ExerciseContext = createContext<ExerciseCont>(
         types: null,
         bodyParts: null,
         equipments: null,
-        levels: null
+        levels: null,
+        loadingExercises: false,
     },
 );
 
@@ -62,13 +63,9 @@ export const ExerciseContextProvider = (props: any) => {
     const [bodyParts, setBodyParts] = useState<Set<any>|null>()
     const [equipments, setEquipments] = useState<Set<any>|null>()
     const [levels, setLevels] = useState<Set<any>|null>()
-
+    const [loadingExercises, setLoadingExercises] = useState(false)
     const paginate = () => {
         setPage(page+1)
-    }
-
-    const initExercises = (exercises: any) => {
-        setExercises(exercises)
     }
 
     const filterExercises = (query: Query) => {
@@ -82,8 +79,21 @@ export const ExerciseContextProvider = (props: any) => {
         setQuery(query)
     }
 
+    const initExercises = async () => {
+        setLoadingExercises(true)
+        const  url = await getDatasetUrl()
+        if (url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    setExercises(data)
+                    setLoadingExercises(false)
+                });
+        }
+    }
+
     useEffect(() => {
-        initExercises(exerciseDataset)
+        initExercises().catch(console.error)
     }, []);
 
     const getMeta = () => {
@@ -115,7 +125,8 @@ export const ExerciseContextProvider = (props: any) => {
         types,
         bodyParts,
         equipments,
-        levels
+        levels,
+        loadingExercises
     }
 
     return (

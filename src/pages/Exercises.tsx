@@ -11,11 +11,13 @@ import Exercise from "../components/exercises/exercise/Exercise";
 import EmptyState from "../components/exercises/empty-state/EmptyState";
 import {ExerciseType} from '../contexts/exercise-context'
 import SearchForm from "../components/exercises/search-form/SearchForm";
-
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
+import Spinner from "../components/spinner/Spinner";
 
 const Exercises = () => {
 
-    const {exercises, page, paginate, limit, getMeta} = useContext(ExerciseContext)
+    const {exercises, page, paginate, limit, getMeta, loadingExercises} = useContext(ExerciseContext)
     const {dark} = useContext(ThemeContext)
 
     const [limitedExercises, setLimitedExercises] = useState<ExerciseType[]>([])
@@ -36,7 +38,8 @@ const Exercises = () => {
                 <Block>
                     <Text classes={`${dark ? "bb-secondary-300" : "bb-neutral-900"}`} type="h1" text={`Exercises (${limitedExercises.length})`}/>
                 </Block>
-                {limitedExercises.length > 0 ?
+                {loadingExercises && <Spinner/>}
+                {!loadingExercises && limitedExercises.length > 0 ?
                     <>
                         <SearchQuery/>
                         {limitedExercises.slice(0, page * limit).map(exercise => <Exercise key={exercise.id} data={exercise}/>)}
@@ -51,7 +54,9 @@ const Exercises = () => {
                             </Button>
                         }
                     </> :
-                    <EmptyState message={"No exercises found."}/>
+                    <>
+                        {!loadingExercises && <EmptyState message={"No exercises found."}/>}
+                    </>
                 }
             </Block>
         </AppWrapper>

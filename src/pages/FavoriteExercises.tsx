@@ -13,15 +13,14 @@ import exercises from "./Exercises";
 import ExerciseContext, {ExerciseType} from "../contexts/exercise-context";
 import exerciseContext from "../contexts/exercise-context";
 import {set} from "js-cookie";
+import Spinner from "../components/spinner/Spinner";
 
 const FavoriteExercises = () => {
-    const {exercises} = useContext(ExerciseContext)
+    const {exercises, loadingExercises} = useContext(ExerciseContext)
     const {newFavorites, setNewFavorites, user} = useContext(UserContext)
     const {dark} = useContext(ThemeContext)
 
-    const [isAuth, setIsAuth] = useState(user.email !== '')
-
-    const [list, setList] = useState<ExerciseType[]>([])
+    const [list, setList] = useState<ExerciseType[]|null>(null)
 
     useEffect(() => {
         if(newFavorites) {
@@ -45,31 +44,22 @@ const FavoriteExercises = () => {
 
     }, [exercises, user.favorites]);
 
-    useEffect(() => {
-        if (user.email !== '') {
-            setIsAuth(true)
-        } else {
-            setIsAuth(false)
-        }
-    }, [user])
-
-    if (!isAuth) {
-        return <Navigate to={'/'}/>
-    }
-
     return (
         <AppWrapper>
             <Block column classes="bb-gap-300">
                 <Block>
                     <Text classes={`${dark ? "bb-secondary-300" : "bb-neutral-900"}`} type="h1" text={"Favorite Exercises"}/>
                 </Block>
-                {list.length > 0 ?
+                {loadingExercises && <Spinner/>}
+                {!loadingExercises && list && list.length > 0 ?
                     <div className={"wopl-grid"}>
                         {list.map((exercise: any) =>
                                 <Exercise key={exercise.title} data={exercise}/>).reverse()}
                     </div>
                     :
-                    <EmptyState message={"No favorites found."}/>
+                    <>
+                    {!loadingExercises && list && <EmptyState message={"No favorites found."}/>}
+                    </>
                 }
             </Block>
         </AppWrapper>

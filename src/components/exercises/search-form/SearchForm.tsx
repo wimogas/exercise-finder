@@ -7,6 +7,7 @@ import Filter from "../filter/Filter";
 import ExerciseContext from "../../../contexts/exercise-context";
 import SearchIcon from "../../../assets/icons/search-line.svg";
 import FilterIcon from "../../../assets/icons/filter.svg";
+import Spinner from "../../spinner/Spinner";
 
 type SearchFormProps = {
     setData: any
@@ -14,7 +15,7 @@ type SearchFormProps = {
 
 const SearchForm = ({setData} : SearchFormProps) => {
 
-    const {filterExercises, saveQuery, types, bodyParts, equipments, levels} = useContext(ExerciseContext)
+    const {filterExercises, saveQuery, types, bodyParts, equipments, levels, loadingExercises } = useContext(ExerciseContext)
 
     const [query, setQuery] = useState({})
     const [searchField, setSearchField] = useState('')
@@ -108,7 +109,8 @@ const SearchForm = ({setData} : SearchFormProps) => {
                     <Icon icon={<FilterIcon/>} size={24}/>
                 </Block>
                 <Block classes={"bb-gap-300 bb-wrap"}>
-                    {!loading && filters.map(filter => <Filter
+                    {loading && loadingExercises && <Spinner/>}
+                    {!loading && !loadingExercises && filters.map(filter => <Filter
                         key={filter.name}
                         name={filter.name}
                         setSelected={filter.setSelected}
