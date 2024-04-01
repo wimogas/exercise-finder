@@ -15,7 +15,7 @@ import SearchForm from "../components/exercises/search-form/SearchForm";
 
 const Exercises = () => {
 
-    const {exercises, page, paginate, limit, query} = useContext(ExerciseContext)
+    const {exercises, page, paginate, limit, getMeta} = useContext(ExerciseContext)
     const {dark} = useContext(ThemeContext)
 
     const [limitedExercises, setLimitedExercises] = useState<ExerciseType[]>([])
@@ -23,6 +23,7 @@ const Exercises = () => {
     useEffect(() => {
         if (exercises.length > 0) {
             setLimitedExercises(exercises)
+            getMeta()
         }
     }, [exercises]);
 

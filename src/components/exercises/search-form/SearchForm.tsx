@@ -14,7 +14,7 @@ type SearchFormProps = {
 
 const SearchForm = ({setData} : SearchFormProps) => {
 
-    const {filterExercises, saveQuery} = useContext(ExerciseContext)
+    const {filterExercises, saveQuery, types, bodyParts, equipments, levels} = useContext(ExerciseContext)
 
     const [query, setQuery] = useState({})
     const [searchField, setSearchField] = useState('')
@@ -22,6 +22,8 @@ const SearchForm = ({setData} : SearchFormProps) => {
     const [bodyPart, setBodyPart] = useState('')
     const [equipment, setEquipment] = useState('')
     const [level, setLevel] = useState('')
+    const [loading, setLoading] = useState(true)
+    const [meta, setMeta] = useState<any>()
 
     interface Query {
         [k: string]: string
@@ -51,40 +53,52 @@ const SearchForm = ({setData} : SearchFormProps) => {
         setData(filterExercises(query))
     }, [query]);
 
-    const filters = [
+    useEffect(() => {
+        if(types && bodyParts && equipments && levels) {
+            setMeta({
+                types,
+                bodyParts,
+                equipments,
+                levels
+            })
+            setLoading(false)
+        }
+    }, [types, bodyParts, equipments, levels]);
+
+    let filters = [
         {
+            ref: "types",
             name: "All Types",
             selected: type,
             setSelected: setType,
-            options: ["Strength", "Cardio"]
         },
         {
+            ref: "bodyParts",
             name: "All Target Areas",
             selected: bodyPart,
             setSelected: setBodyPart,
-            options: ["Biceps", "Quadriceps"]
         },
         {
+            ref: "equipments",
             name: "All Equipment",
             selected: equipment,
             setSelected: setEquipment,
-            options: ["Barbell", "Dumbbell"]
         },
         {
+            ref: "levels",
             name: "All Levels",
             selected: level,
             setSelected: setLevel,
-            options: ["Beginner", "Intermediate"]
         }
     ]
 
     return (
-        <Block classes="bb-bg-neutral-800 bb-secondary-300 bb-p-500 bb-border-radius-300 bb-wrap" style={{"gap" : "24px"}}>
-            <Block align={"center"} classes={"bb-gap-300"}>
-                <Block>
+        <Block column classes="bb-bg-neutral-800 bb-secondary-300 bb-p-500 bb-border-radius-300 bb-gap-300">
+            <Block stretch align={"center"} classes={"bb-gap-300"}>
+                <Block style={{"flex": "0"}}>
                     <Icon icon={<SearchIcon/>} size={24}/>
                 </Block>
-                <Block>
+                <Block stretch flex={9}>
                     <SearchBar setSearchField={setSearchField}/>
                 </Block>
             </Block>
@@ -94,12 +108,12 @@ const SearchForm = ({setData} : SearchFormProps) => {
                     <Icon icon={<FilterIcon/>} size={24}/>
                 </Block>
                 <Block classes={"bb-gap-300 bb-wrap"}>
-                    {filters.map(filter => <Filter
+                    {!loading && filters.map(filter => <Filter
                         key={filter.name}
                         name={filter.name}
                         setSelected={filter.setSelected}
                         selected={filter.selected}
-                        options={filter.options}
+                        options={meta && Array.from(meta[filter.ref])}
                     />)}
                 </Block>
 

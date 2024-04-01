@@ -20,6 +20,11 @@ type ExerciseCont = {
     filterExercises: any,
     query: any,
     saveQuery: any
+    getMeta: any,
+    types: any,
+    bodyParts: any,
+    equipments: any,
+    levels: any
 }
 
 interface Query {
@@ -38,7 +43,12 @@ const ExerciseContext = createContext<ExerciseCont>(
         limit: 20,
         filterExercises: () => {},
         query: {},
-        saveQuery: (query: Query) => {}
+        saveQuery: (query: Query) => {},
+        getMeta: () => {},
+        types: null,
+        bodyParts: null,
+        equipments: null,
+        levels: null
     },
 );
 
@@ -48,6 +58,10 @@ export const ExerciseContextProvider = (props: any) => {
     const [limit, setLimit] = useState<number>(20)
     const [page, setPage] = useState<number>(1)
     const [query, setQuery] = useState<Query|{}>({})
+    const [types, setTypes] = useState<Set<any>|null>()
+    const [bodyParts, setBodyParts] = useState<Set<any>|null>()
+    const [equipments, setEquipments] = useState<Set<any>|null>()
+    const [levels, setLevels] = useState<Set<any>|null>()
 
     const paginate = () => {
         setPage(page+1)
@@ -72,6 +86,23 @@ export const ExerciseContextProvider = (props: any) => {
         initExercises(exerciseDataset)
     }, []);
 
+    const getMeta = () => {
+        let types = new Set()
+        let bodyParts = new Set()
+        let equipments = new Set()
+        let levels = new Set()
+        exercises.map(exercise => {
+            types.add(exercise.type)
+            bodyParts.add(exercise.bodyPart)
+            equipments.add(exercise.equipment)
+            levels.add(exercise.level)
+        })
+        setTypes(types)
+        setBodyParts(bodyParts)
+        setEquipments(equipments)
+        setLevels(levels)
+    }
+
     const context: ExerciseCont = {
         exercises,
         page,
@@ -79,7 +110,12 @@ export const ExerciseContextProvider = (props: any) => {
         limit,
         filterExercises,
         query,
-        saveQuery
+        saveQuery,
+        getMeta,
+        types,
+        bodyParts,
+        equipments,
+        levels
     }
 
     return (

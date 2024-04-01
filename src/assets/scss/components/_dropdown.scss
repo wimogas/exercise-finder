@@ -1,6 +1,8 @@
 .wopl-dropdown {
   border: 1px solid;
   border-radius: $borderRadius300;
+  max-height: 250px;
+  overflow: auto;
   &-dark {
     @extend .wopl-dropdown;
     background-color: $neutral900;
