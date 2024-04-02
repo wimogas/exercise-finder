@@ -12,13 +12,13 @@ Simple React App made with Typescript, React, Barebones UI, Barebones CSS, Webpa
 
 - [x] Save your Favorite Exercises
 
-- [] Filter and Search your Favorites (coming soon)
+- [ ] Filter and Search your Favorites (coming soon)
 
-- [] Bundle Exercises into Workouts
+- [ ] Bundle Exercises into Workouts
 
-- [] Bundle Workouts into Programs
+- [ ] Bundle Workouts into Programs
 
-- [] Get relevant data analytics of your Programs, Workouts and Exercises
+- [ ] Get relevant data analytics of your Programs, Workouts and Exercises
 
 
 # Credits
