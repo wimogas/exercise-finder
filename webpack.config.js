@@ -38,6 +38,6 @@ module.exports = {
       extensions: ['.tsx', '.ts', '.js'],
    },
    plugins: [
-      new Dotenv(),
+      new Dotenv({ systemvars: true }),
    ]
 };
