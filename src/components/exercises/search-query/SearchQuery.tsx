@@ -5,15 +5,17 @@ import {Simulate} from "react-dom/test-utils";
 import load = Simulate.load;
 import Spinner from "../../spinner/Spinner";
 
-
-const SearchQuery = () => {
-
-    const {query} = useContext(ExerciseContext)
+type SearchQueryProps = {
+    query: any,
+}
+const SearchQuery = ({query} : SearchQueryProps) => {
 
     const [queryList, setQueryList] = useState<any[]>([])
 
     useEffect(() => {
-        setQueryList(Object.values(query))
+        if (query) {
+            setQueryList(Object.values(query))
+        }
     }, [query]);
 
     return (

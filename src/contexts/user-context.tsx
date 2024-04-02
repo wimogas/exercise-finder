@@ -1,8 +1,8 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {auth, firebaseApp, signInWithGooglePopup} from "../firebase";
 import {onAuthStateChanged} from 'firebase/auth'
 import {collection, doc, arrayUnion, arrayRemove, getDocs, getFirestore, query, where, updateDoc, addDoc} from "@firebase/firestore/lite";
-
+import ExerciseContext, {ExerciseType, FilterQuery} from "./exercise-context";
 
 export type User = {
     id: string,
@@ -19,6 +19,7 @@ type UserCont = {
     removeFavorite: any,
     logout: any,
     loginWithGoogle: any,
+    loadFavorites: any
 }
 
 const initialUser = {
@@ -37,10 +38,13 @@ const UserContext = createContext<UserCont>(
         removeFavorite: (id: string) => {},
         logout: () => {},
         loginWithGoogle: () => {},
+        loadFavorites: () => {}
     },
 );
 
 export const UserContextProvider = (props: any) => {
+
+    const {exercises} = useContext(ExerciseContext)
 
     const firestore = getFirestore(firebaseApp);
 
@@ -95,6 +99,17 @@ export const UserContextProvider = (props: any) => {
                 favorites: user.favorites.filter((fav: any) => fav !== id)
             }
         })
+    }
+
+    const loadFavorites = () => {
+        let foundFavorites:ExerciseType[] = []
+        user.favorites.map((fav: string) => {
+            const found = exercises.find(ex => ex.id === fav)
+            if (found) {
+                foundFavorites.push(found)
+            }
+        })
+        return foundFavorites
     }
 
     const logout = async () => {
@@ -159,6 +174,7 @@ export const UserContextProvider = (props: any) => {
         removeFavorite,
         logout,
         loginWithGoogle,
+        loadFavorites
     }
 
     return (

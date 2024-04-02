@@ -1,34 +1,34 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {Block, Icon} from "react-barebones-ts";
+import {ExerciseType} from "../../../contexts/exercise-context";
 
-import SearchBar from "../search-bar/SearchBar";
-
-import Filter from "../filter/Filter";
-import ExerciseContext from "../../../contexts/exercise-context";
 import SearchIcon from "../../../assets/icons/search-line.svg";
 import FilterIcon from "../../../assets/icons/filter.svg";
-import Spinner from "../../spinner/Spinner";
+
+import SearchBar from "../search-bar/SearchBar";
+import Filter from "../filter/Filter";
 
 type SearchFormProps = {
-    setData: any
+    data: any,
+    setData: any,
 }
 
-const SearchForm = ({setData} : SearchFormProps) => {
+type Query = {
+    [k:string]: string
+}
 
-    const {filterExercises, saveQuery, types, bodyParts, equipments, levels, loadingExercises } = useContext(ExerciseContext)
+const SearchForm = ({data, setData} : SearchFormProps) => {
 
-    const [query, setQuery] = useState({})
+    const originalData = useRef<ExerciseType[]>()
+
+    const [query, setQuery] = useState<Query|null>(null)
+
     const [searchField, setSearchField] = useState('')
     const [type, setType] = useState('')
     const [bodyPart, setBodyPart] = useState('')
     const [equipment, setEquipment] = useState('')
     const [level, setLevel] = useState('')
-    const [loading, setLoading] = useState(true)
-    const [meta, setMeta] = useState<any>()
 
-    interface Query {
-        [k: string]: string
-    }
     useEffect(() => {
         let q: Query = {}
         if (searchField != '') {
@@ -46,25 +46,32 @@ const SearchForm = ({setData} : SearchFormProps) => {
         if (level != '') {
             q["level"] = level
         }
-        setQuery(q)
+        if (Object.keys(q).length > 0) {
+            setQuery(q)
+        } else {
+            setQuery(null)
+        }
     }, [searchField, type, bodyPart, equipment, level]);
 
-    useEffect(() => {
-        saveQuery(query)
-        setData(filterExercises(query))
-    }, [query]);
+    const filter = (query: Query) => {
+        if (!originalData.current) {
+            originalData.current = data
+        }
+        if(originalData.current) {
+            return originalData.current.filter((item: {[x: string]: string; }) =>
+                Object.entries(query)
+                    .every(([key, value]) => item[key as keyof Query].toLowerCase().includes(value.toLowerCase()))
+            );
+        }
+    }
 
     useEffect(() => {
-        if(types && bodyParts && equipments && levels) {
-            setMeta({
-                types,
-                bodyParts,
-                equipments,
-                levels
-            })
-            setLoading(false)
+        if (query && Object.keys(query).length > 0) {
+            setData(filter(query))
+        } else if (originalData.current) {
+            setData(originalData.current)
         }
-    }, [types, bodyParts, equipments, levels]);
+    }, [query]);
 
     let filters = [
         {
@@ -72,24 +79,28 @@ const SearchForm = ({setData} : SearchFormProps) => {
             name: "All Types",
             selected: type,
             setSelected: setType,
+            options: [""]
         },
         {
             ref: "bodyParts",
             name: "All Target Areas",
             selected: bodyPart,
             setSelected: setBodyPart,
+            options: [""]
         },
         {
             ref: "equipments",
             name: "All Equipment",
             selected: equipment,
             setSelected: setEquipment,
+            options: [""]
         },
         {
             ref: "levels",
             name: "All Levels",
             selected: level,
             setSelected: setLevel,
+            options: [""]
         }
     ]
 
@@ -109,17 +120,14 @@ const SearchForm = ({setData} : SearchFormProps) => {
                     <Icon icon={<FilterIcon/>} size={24}/>
                 </Block>
                 <Block classes={"bb-gap-300 bb-wrap"}>
-                    {loading && loadingExercises && <Spinner/>}
-                    {!loading && !loadingExercises && filters.map(filter => <Filter
+                    {filters.map(filter => <Filter
                         key={filter.name}
                         name={filter.name}
                         setSelected={filter.setSelected}
                         selected={filter.selected}
-                        options={meta && Array.from(meta[filter.ref])}
+                        options={filter.options}
                     />)}
                 </Block>
-
-
             </Block>
         </Block>
     )

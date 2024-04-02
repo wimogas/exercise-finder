@@ -1,45 +1,25 @@
 import React, {useContext, useEffect, useState} from 'react'
-
-import {Block, Button, Text} from "react-barebones-ts";
-
-import {Navigate, useNavigate} from "react-router-dom";
-import ThemeContext from "../contexts/theme-context";
+import {Block} from "react-barebones-ts";
 import AppWrapper from "../layout/AppWrapper";
-import SearchLine from "../assets/icons/search-line.svg";
 import UserContext from "../contexts/user-context";
-import Exercise from "../components/exercises/exercise/Exercise";
-import EmptyState from "../components/exercises/empty-state/EmptyState";
-import exercises from "./Exercises";
 import ExerciseContext, {ExerciseType} from "../contexts/exercise-context";
-import exerciseContext from "../contexts/exercise-context";
-import {set} from "js-cookie";
 import Spinner from "../components/spinner/Spinner";
+import ExerciseList from "../components/exercises/exercise-list/ExerciseList";
+import SearchForm from "../components/exercises/search-form/SearchForm";
 
 const FavoriteExercises = () => {
+
     const {exercises, loadingExercises} = useContext(ExerciseContext)
-    const {newFavorites, setNewFavorites, user} = useContext(UserContext)
-    const {dark} = useContext(ThemeContext)
+    const {user, loadFavorites} = useContext(UserContext)
 
-    const [list, setList] = useState<ExerciseType[]|null>(null)
-
-    useEffect(() => {
-        if(newFavorites) {
-            setNewFavorites(false)
-        }
-    }, [newFavorites]);
+    const [favorites, setFavorites] = useState<ExerciseType[]|null>(null)
 
     useEffect(() => {
         if (exercises.length > 0 && user.favorites.length > 0) {
-            let foundFavorites:ExerciseType[] = []
-            user.favorites.map(fav => {
-                const found = exercises.find(ex => ex.id === fav)
-                if (found) {
-                    foundFavorites.push(found)
-                }
-            })
-            setList(foundFavorites)
+            setFavorites(loadFavorites())
+
         } else {
-            setList([])
+            setFavorites([])
         }
 
     }, [exercises, user.favorites]);
@@ -47,18 +27,14 @@ const FavoriteExercises = () => {
     return (
         <AppWrapper>
             <Block column classes="bb-gap-300">
-                <Block>
-                    <Text classes={`${dark ? "bb-secondary-300" : "bb-neutral-900"}`} type="h1" text={"Favorite Exercises"}/>
-                </Block>
-                {loadingExercises && <Spinner/>}
-                {!loadingExercises && list && list.length > 0 ?
-                    <div className={"wopl-grid"}>
-                        {list.map((exercise: any) =>
-                                <Exercise key={exercise.title} data={exercise}/>).reverse()}
-                    </div>
-                    :
+                {loadingExercises ? <Spinner/> :
                     <>
-                    {!loadingExercises && list && <EmptyState message={"No favorites found."}/>}
+                        {favorites &&
+                            <>
+                                <SearchForm data={favorites} setData={setFavorites}/>
+                                <ExerciseList data={favorites}/>
+                            </>
+                        }
                     </>
                 }
             </Block>
