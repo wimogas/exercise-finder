@@ -2,23 +2,23 @@
 
 Simple React App made with Typescript, React, Barebones UI, Barebones CSS, Webpack and Firebase. Deployed with Vercel here:
 
-[Vist App]("https://wimogas-exercise-finder.vercel.app/")
+[Vist App](https://wimogas-exercise-finder.vercel.app/)
 
 # Features
 
-[x] - Search a dataset of 2500+ exercises
+- [x] Search a dataset of 2500+ exercises
 
-[x] - Filter by Type, Target Areas, Equipment, Level
+- [x] Filter by Type, Target Areas, Equipment, Level
 
-[x] - Save your Favorite Exercises
+- [x] Save your Favorite Exercises
 
-[] - Filter and Search your Favorites (coming soon)
+- [] Filter and Search your Favorites (coming soon)
 
-[] - Bundle Exercises into Workouts
+- [] Bundle Exercises into Workouts
 
-[] - Bundle Workouts into Programs
+- [] Bundle Workouts into Programs
 
-[] - Get relevant data analytics of your Programs, Workouts and Exercises
+- [] Get relevant data analytics of your Programs, Workouts and Exercises
 
 
 # Credits
