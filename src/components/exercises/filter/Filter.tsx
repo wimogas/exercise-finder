@@ -5,22 +5,26 @@ import ThemeContext from "../../../contexts/theme-context";
 import ArrowDownIcon from '../../../assets/icons/arrow-down-s-line.svg'
 
 type FilterProps = {
+    filter: string,
     name: string,
-    selected: string,
+    filters: any,
     options: any,
     setSelected: any,
 }
 
-const Filter = ({name, selected, options, setSelected}: FilterProps) => {
+const Filter = ({name, filter, filters, options, setSelected}: FilterProps) => {
 
     const {dark} = useContext(ThemeContext);
 
     const menuOptions = options.map((option: any) =>
             <Button
-                classes={`bb-mx-300 wopl-button-${selected === option ? 'primary' : 'secondary'}${dark ? '-dark' : ''}`}
+                classes={`bb-mx-300 wopl-button-${filters[filter] === option ? 'primary' : 'secondary'}${dark ? '-dark' : ''}`}
                 key={option}
-                disabled={option === name}
-                action={() => setSelected((prevState: any) => prevState === option ? '' : option)}>
+                action={() => setSelected((filters: any) => {
+                    return {
+                    ...filters,
+                    [filter]: filters[filter] === option ? '' : option
+                }})}>
                 {option}
             </Button>
         )
@@ -28,9 +32,9 @@ const Filter = ({name, selected, options, setSelected}: FilterProps) => {
     return (
         <Block align={"center"} classes="bb-gap-300">
             <Dropdown
-                buttonClasses={`wopl-button-${selected ? 'primary' : 'secondary'}${dark ? '-dark' : ''}`}
+                buttonClasses={`wopl-button-${filters[filter] ? 'primary' : 'secondary'}${dark ? '-dark' : ''}`}
                 buttonChildren={<>
-                    {selected || name}
+                    {filters[filter] || name}
                     <Icon icon={<ArrowDownIcon/>}/>
                 </>}
                 menuClasses={"wopl-dropdown-dark"}

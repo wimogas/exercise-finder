@@ -137,7 +137,6 @@ export const UserContextProvider = (props: any) => {
         try {
             const response = await signInWithGooglePopup();
             const token = await response.user.getIdToken();
-            console.log(token, response.user)
             if (token && response.user && response.user.email) {
                 const newUser = {
                     email: response.user.email,

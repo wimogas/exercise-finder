@@ -5,14 +5,6 @@ const Dotenv = require('dotenv-webpack');
 module.exports = {
    context: __dirname,
    entry: './src/index.js',
-   output: {
-      path: path.resolve( __dirname, 'public' ),
-      filename: 'main.js',
-      publicPath: '/',
-   },
-   devServer: {
-      historyApiFallback: true
-   },
    module: {
       rules: [
          {
@@ -47,9 +39,5 @@ module.exports = {
    },
    plugins: [
       new Dotenv(),
-      new HtmlWebPackPlugin({
-         template: path.resolve( __dirname, 'src/index.html' ),
-         filename: 'index.html'
-      })
    ]
 };
