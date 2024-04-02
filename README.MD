@@ -2,7 +2,7 @@
 
 Simple React App made with Typescript, React, Barebones UI, Barebones CSS, Webpack and Firebase. Deployed with Vercel here:
 
-[Vist App]("")
+[Vist App]("https://wimogas-exercise-finder.vercel.app/")
 
 # Features
 
